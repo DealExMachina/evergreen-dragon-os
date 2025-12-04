@@ -1,5 +1,14 @@
-# Run lint-staged on staged files (linting, formatting)
+# Run lint-staged on staged files (linting, formatting, security checks)
 pnpm exec lint-staged
+
+# Security: Check for dependency vulnerabilities (moderate and above)
+echo "🔒 Checking for security vulnerabilities..."
+pnpm audit --audit-level=moderate --json > /dev/null 2>&1 || {
+  echo "⚠️  Security vulnerabilities detected. Run 'pnpm audit' for details."
+  echo "   Consider running 'pnpm audit fix' to resolve automatically fixable issues."
+  # Uncomment to block commits on security vulnerabilities:
+  # exit 1
+}
 
 # Run type checking on all packages (quick check)
 # Currently warns but doesn't block - uncomment exit 1 to block on type errors

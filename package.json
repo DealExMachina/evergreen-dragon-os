@@ -12,11 +12,17 @@
     "type-check": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' type-check",
     "clean": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' clean",
     "dev": "pnpm -r --filter='./apps/*' dev",
-    "prepare": "husky"
+    "prepare": "husky",
+    "security:audit": "pnpm audit --audit-level=moderate",
+    "security:check": "pnpm security:audit && pnpm lint:security",
+    "lint:security": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' lint --max-warnings=0"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
     "eslint": "^9.39.1",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-sonarjs": "^3.0.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
@@ -34,7 +40,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix",
+      "eslint --fix --max-warnings=0",
       "prettier --write"
     ],
     "*.{json,md,yml,yaml}": [
