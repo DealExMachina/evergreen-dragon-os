@@ -42,13 +42,19 @@ export default tseslint.config(
       'sonarjs/no-unused-collection': 'warn',
       'sonarjs/prefer-while': 'warn',
       
-      // TypeScript strict rules
+      // TypeScript strict rules (disabled for test files - they don't have type info)
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unsafe-assignment': 'warn',
-      '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/no-unsafe-call': 'warn',
-      '@typescript-eslint/no-unsafe-return': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
+    },
+  },
+  {
+    // Disable type-aware rules for test files
+    files: ['**/*.test.ts', '**/tests/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
     },
   },
   {

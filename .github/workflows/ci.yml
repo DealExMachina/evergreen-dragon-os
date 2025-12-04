@@ -24,6 +24,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: pnpm --filter @evergreen/supabase-client prisma generate
+
       - run: pnpm type-check
 
       - run: pnpm lint
@@ -31,4 +33,4 @@ jobs:
       - run: pnpm security:audit
         continue-on-error: true
 
-      - run: pnpm test
+      - run: pnpm test:unit

@@ -44,14 +44,19 @@ describe('withRetry', () => {
     const error = new Error('persistent error');
     const operation = vi.fn().mockRejectedValue(error);
 
-    // Start the retry operation
+    // Start the retry operation and immediately attach error handler
     const promise = withRetry(operation, { maxAttempts: 3, delay: 100 });
+
+    // Attach catch handler immediately to prevent unhandled rejection
+    promise.catch(() => {
+      // Error will be handled by expect().rejects below
+    });
 
     // Fast-forward through all retries
     // First attempt fails immediately, then retry after 100ms, then after 200ms
     await vi.advanceTimersByTimeAsync(100);
     await vi.advanceTimersByTimeAsync(200);
-    
+
     // Wait for promise to settle (this handles the rejection properly)
     await expect(promise).rejects.toThrow('persistent error');
     expect(operation).toHaveBeenCalledTimes(3);
@@ -143,10 +148,7 @@ describe('withRetry', () => {
 
 describe('retryable', () => {
   it('should wrap function with retry logic', async () => {
-    const fn = vi
-      .fn()
-      .mockRejectedValueOnce(new Error('fail'))
-      .mockResolvedValueOnce('success');
+    const fn = vi.fn().mockRejectedValueOnce(new Error('fail')).mockResolvedValueOnce('success');
 
     const retryableFn = retryable(fn, { delay: 100 });
 
@@ -161,4 +163,3 @@ describe('retryable', () => {
     expect(fn).toHaveBeenCalledWith('arg1', 'arg2');
   });
 });
-
