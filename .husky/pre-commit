@@ -1,0 +1,17 @@
+# Run lint-staged on staged files (linting, formatting)
+pnpm exec lint-staged
+
+# Run type checking on all packages (quick check)
+# Currently warns but doesn't block - uncomment exit 1 to block on type errors
+pnpm type-check || {
+  echo "⚠️  Type check failed. Consider fixing type errors before committing."
+  # exit 1  # Uncomment to block commits on type errors
+}
+
+# Run unit tests (only on changed packages for speed)
+# This runs tests but doesn't fail the commit if tests fail
+# Uncomment the exit 1 line if you want to block commits on test failures
+pnpm test:unit || {
+  echo "⚠️  Some tests failed. Consider fixing them before committing."
+  # exit 1  # Uncomment to block commits on test failures
+}

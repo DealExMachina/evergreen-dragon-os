@@ -11,13 +11,16 @@
     "test:integration": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' test:integration",
     "type-check": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' type-check",
     "clean": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' clean",
-    "dev": "pnpm -r --filter='./apps/*' dev"
+    "dev": "pnpm -r --filter='./apps/*' dev",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "typescript": "^5.9.3",
+    "eslint": "^9.39.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
-    "eslint": "^9.39.1"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -28,6 +31,14 @@
     "overrides": {
       "zod": "^4.1.13"
     }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }
-
