@@ -1,0 +1,32 @@
+{
+  "name": "@evergreen/workflows-service",
+  "version": "0.1.0",
+  "description": "Temporal worker service for Evergreen Dragon OS workflows",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@temporalio/worker": "^1.13.2",
+    "@temporalio/client": "^1.13.2",
+    "@evergreen/config": "workspace:*",
+    "@evergreen/shared-utils": "workspace:*",
+    "@evergreen/supabase-client": "workspace:*",
+    "@evergreen/mem0-client": "workspace:*",
+    "@evergreen/workflows": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3",
+    "tsx": "^4.21.0",
+    "vitest": "^4.0.15"
+  }
+}
+

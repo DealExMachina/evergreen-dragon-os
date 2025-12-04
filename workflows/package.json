@@ -1,0 +1,22 @@
+{
+  "name": "@evergreen/workflows",
+  "version": "0.1.0",
+  "description": "Temporal workflow definitions for Evergreen Dragon OS",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@temporalio/workflow": "^1.13.2",
+    "@evergreen/config": "workspace:*",
+    "@evergreen/shared-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}
+

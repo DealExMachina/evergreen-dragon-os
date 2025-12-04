@@ -1,0 +1,40 @@
+{
+  "name": "@evergreen/supabase-client",
+  "version": "0.1.0",
+  "description": "Typed Supabase client with Realtime helpers and RPC wrappers",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run --coverage",
+    "test:watch": "vitest watch",
+    "generate-types": "supabase gen types typescript --local > src/database.types.ts || echo 'Run supabase start first'"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.1.0",
+    "@supabase/supabase-js": "^2.86.0",
+    "@evergreen/config": "workspace:*",
+    "@evergreen/shared-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "prisma": "^7.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.15"
+  },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  }
+}
+

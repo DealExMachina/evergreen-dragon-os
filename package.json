@@ -1,0 +1,33 @@
+{
+  "name": "evergreen-dragon-os",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-Native Operating System for Evergreen & ELTIF 2.0 Fund Management",
+  "scripts": {
+    "build": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' build",
+    "lint": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' lint",
+    "test": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' test",
+    "test:unit": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' test:unit",
+    "test:integration": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' test:integration",
+    "type-check": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' type-check",
+    "clean": "pnpm -r --filter='./packages/*' --filter='./apps/*' --filter='./workflows' clean",
+    "dev": "pnpm -r --filter='./apps/*' dev"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3",
+    "prettier": "^3.7.4",
+    "eslint": "^9.39.1"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "pnpm": {
+    "overrides": {
+      "zod": "^4.1.13"
+    }
+  }
+}
+

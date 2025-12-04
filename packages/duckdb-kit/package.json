@@ -1,0 +1,37 @@
+{
+  "name": "@evergreen/duckdb-kit",
+  "version": "0.1.0",
+  "description": "DuckDB connection manager, scenario runners, and query builders for analytical operations",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run --coverage",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "duckdb": "^1.4.2",
+    "@evergreen/config": "workspace:*",
+    "@evergreen/shared-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.15"
+  },
+  "optionalDependencies": {
+    "@aws-sdk/client-s3": "^3.943.0"
+  }
+}
+

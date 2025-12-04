@@ -1,0 +1,17 @@
+// This is a placeholder Prisma schema.
+// Run `npx prisma db pull` after connecting to Supabase to generate the actual schema
+// or define your models based on docs/02_data_model.md
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Models will be added here based on the data model documentation
+// See docs/02_data_model.md for the complete schema
+

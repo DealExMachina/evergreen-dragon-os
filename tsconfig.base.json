@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "incremental": true,
+    "paths": {
+      "@evergreen/config": ["./packages/config/src"],
+      "@evergreen/config/*": ["./packages/config/src/*"],
+      "@evergreen/supabase-client": ["./packages/supabase-client/src"],
+      "@evergreen/supabase-client/*": ["./packages/supabase-client/src/*"],
+      "@evergreen/duckdb-kit": ["./packages/duckdb-kit/src"],
+      "@evergreen/duckdb-kit/*": ["./packages/duckdb-kit/src/*"],
+      "@evergreen/mem0-client": ["./packages/mem0-client/src"],
+      "@evergreen/mem0-client/*": ["./packages/mem0-client/src/*"],
+      "@evergreen/shared-utils": ["./packages/shared-utils/src"],
+      "@evergreen/shared-utils/*": ["./packages/shared-utils/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
+}
+

@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+  # Supabase local stack
+  supabase-db:
+    image: supabase/postgres:16.1.0.147
+    container_name: evergreen-supabase-db
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54322:5432"
+    volumes:
+      - supabase-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  supabase-studio:
+    image: supabase/studio:20241220-4c5c0b3
+    container_name: evergreen-supabase-studio
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      SUPABASE_URL: http://supabase-kong:8000
+      STUDIO_PG_META_URL: http://supabase-meta:8080
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54323:3000"
+    restart: unless-stopped
+
+  # Temporal local cluster
+  temporal:
+    image: temporalio/auto-setup:1.24.0
+    container_name: evergreen-temporal
+    depends_on:
+      - temporal-postgresql
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=temporal-postgresql
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+    ports:
+      - "7233:7233"
+      - "7234:7234"
+      - "7235:7235"
+    volumes:
+      - temporal-data:/var/lib/temporal
+    command: >
+      sh -c "
+        /etc/temporal/entrypoint.sh
+      "
+
+  temporal-postgresql:
+    image: postgres:16-alpine
+    container_name: evergreen-temporal-postgresql
+    environment:
+      POSTGRES_PASSWORD: temporal
+      POSTGRES_USER: temporal
+      POSTGRES_DB: temporal
+    ports:
+      - "54324:5432"
+    volumes:
+      - temporal-postgresql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  temporal-ui:
+    image: temporalio/ui:2.28.0
+    container_name: evergreen-temporal-ui
+    depends_on:
+      - temporal
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+    ports:
+      - "8088:8080"
+    restart: unless-stopped
+
+  # Langfuse self-hosted
+  langfuse-postgres:
+    image: postgres:16-alpine
+    container_name: evergreen-langfuse-postgres
+    environment:
+      POSTGRES_USER: langfuse
+      POSTGRES_PASSWORD: langfuse
+      POSTGRES_DB: langfuse
+    ports:
+      - "54325:5432"
+    volumes:
+      - langfuse-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  langfuse:
+    image: langfuse/langfuse:2.50.0
+    container_name: evergreen-langfuse
+    depends_on:
+      langfuse-postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://langfuse:langfuse@langfuse-postgres:5432/langfuse
+      - NEXTAUTH_SECRET=dev-secret-change-in-production
+      - NEXTAUTH_URL=http://localhost:3000
+      - SALT=dev-salt-change-in-production
+      - LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES=true
+    ports:
+      - "3000:3000"
+    volumes:
+      - langfuse-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  supabase-db-data:
+  temporal-data:
+  temporal-postgresql-data:
+  langfuse-postgres-data:
+  langfuse-data:
+
+networks:
+  default:
+    name: evergreen-dev-network
+

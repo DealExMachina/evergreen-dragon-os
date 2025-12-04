@@ -1,0 +1,28 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "tests", "**/*.test.ts", "**/*.spec.ts"],
+  "references": [
+    {
+      "path": "../../packages/config"
+    },
+    {
+      "path": "../../packages/shared-utils"
+    },
+    {
+      "path": "../../packages/supabase-client"
+    },
+    {
+      "path": "../../packages/duckdb-kit"
+    },
+    {
+      "path": "../../packages/mem0-client"
+    }
+  ]
+}
+

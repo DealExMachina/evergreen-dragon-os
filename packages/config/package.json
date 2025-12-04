@@ -1,0 +1,35 @@
+{
+  "name": "@evergreen/config",
+  "version": "0.1.0",
+  "description": "Typed configuration loader with Zod validation and Infisical integration",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run --coverage",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.15"
+  },
+  "peerDependencies": {
+    "@infisical/sdk": "^4.0.6"
+  }
+}
+

@@ -1,0 +1,23 @@
+{
+  "name": "@evergreen/infra",
+  "version": "0.1.0",
+  "description": "Pulumi infrastructure as code for Evergreen Dragon OS",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "preview": "pulumi preview",
+    "up": "pulumi up",
+    "destroy": "pulumi destroy",
+    "refresh": "pulumi refresh"
+  },
+  "dependencies": {
+    "@pulumi/pulumi": "^3.120.0",
+    "@pulumi/aws": "^6.30.0",
+    "@pulumi/awsx": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
+
