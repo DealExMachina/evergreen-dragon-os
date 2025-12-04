@@ -1,24 +1,6 @@
 import type { SupabaseClient, RealtimeChannel } from '@supabase/supabase-js';
 import { getLogger } from '@evergreen/shared-utils';
-
-/**
- * Realtime subscription callback
- */
-export interface RealtimeCallback<T = unknown> {
-  (payload: {
-    eventType: 'INSERT' | 'UPDATE' | 'DELETE';
-    new?: T;
-    old?: T;
-  }): void | Promise<void>;
-}
-
-/**
- * Realtime subscription options
- */
-export interface RealtimeSubscriptionOptions {
-  event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*';
-  filter?: string;
-}
+import type { RealtimeCallback, RealtimeSubscriptionOptions } from './realtime';
 
 /**
  * Manages Supabase Realtime subscriptions
@@ -54,15 +36,16 @@ export class RealtimeSubscriptionManager {
 
     const channel = this.client
       .channel(channelName)
+
       .on(
-        'postgres_changes',
+        'postgres_changes' as any,
         {
           event: options.event || '*',
           schema: 'public',
           table,
           filter: options.filter,
-        },
-        async (payload) => {
+        } as any,
+        async (payload: any) => {
           this.logger.debug('Realtime event received', {
             table,
             eventType: payload.eventType,
@@ -131,4 +114,3 @@ export class RealtimeSubscriptionManager {
     return Array.from(this.channels.keys());
   }
 }
-

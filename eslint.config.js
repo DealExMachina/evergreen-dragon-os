@@ -68,6 +68,17 @@ export default tseslint.config(
     },
   },
   {
+    // Supabase client requires dynamic Prisma import and Supabase type assertions
+    files: ['packages/supabase-client/src/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+    },
+  },
+  {
     ignores: ['node_modules/**', 'dist/**', 'build/**', '*.config.js', '*.config.ts'],
   }
 );

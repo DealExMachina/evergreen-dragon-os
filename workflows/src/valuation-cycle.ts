@@ -4,9 +4,17 @@ import type { ValuationCycleInput, WorkflowResult } from './types';
 interface ValuationActivities {
   fetchAppraisals: (assetIds: string[]) => Promise<Array<{ assetId: string; appraisal: unknown }>>;
   ocrDocuments: (documentUrl: string) => Promise<Record<string, unknown>>;
-  modelValuation: (assetId: string, data: unknown) => Promise<{ valuation: number; confidence: number }>;
-  checkAdminNAV: (assetId: string, computedNAV: number) => Promise<{ matches: boolean; adminNAV: number }>;
-  postResults: (results: Array<{ assetId: string; nav: number; confidence: number }>) => Promise<void>;
+  modelValuation: (
+    assetId: string,
+    data: unknown
+  ) => Promise<{ valuation: number; confidence: number }>;
+  checkAdminNAV: (
+    assetId: string,
+    computedNAV: number
+  ) => Promise<{ matches: boolean; adminNAV: number }>;
+  postResults: (
+    results: Array<{ assetId: string; nav: number; confidence: number }>
+  ) => Promise<void>;
 }
 
 const { fetchAppraisals, ocrDocuments, modelValuation, checkAdminNAV, postResults } =
@@ -49,7 +57,7 @@ export async function valuationCycleWorkflow(input: ValuationCycleInput): Promis
 
       // Model valuation
       const valuation = await modelValuation(assetId, {
-        ...appraisal,
+        ...(appraisal && typeof appraisal === 'object' ? appraisal : {}),
         ...documentData,
         quarter: input.quarter,
         year: input.year,
@@ -99,4 +107,3 @@ export async function valuationCycleWorkflow(input: ValuationCycleInput): Promis
     };
   }
 }
-

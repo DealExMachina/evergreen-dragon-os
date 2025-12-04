@@ -26,17 +26,18 @@ export function subscribeToTable<T = unknown>(
   options: RealtimeSubscriptionOptions = {}
 ): RealtimeChannel {
   const logger = getLogger();
-  const channel = client
+  return client
     .channel(`realtime:${table}`)
+
     .on(
-      'postgres_changes',
+      'postgres_changes' as any,
       {
         event: options.event || '*',
         schema: 'public',
         table: table,
         filter: options.filter,
-      },
-      (payload) => {
+      } as any,
+      (payload: any) => {
         logger.debug(`Realtime event on ${table}`, {
           eventType: payload.eventType,
           table,
@@ -57,8 +58,6 @@ export function subscribeToTable<T = unknown>(
         logger.error(`Failed to subscribe to Realtime channel: ${table}`);
       }
     });
-
-  return channel;
 }
 
 /**
@@ -85,4 +84,3 @@ export async function unsubscribe(channel: RealtimeChannel): Promise<void> {
   const logger = getLogger();
   logger.info(`Unsubscribed from channel: ${channel.topic}`);
 }
-
