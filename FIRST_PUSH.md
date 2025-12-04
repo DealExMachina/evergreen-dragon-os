@@ -3,7 +3,7 @@
 ## Repository Setup
 
 1. **Create the repository on GitHub**
-   - Organization: `deal-ex-machina`
+   - Organization: `DealExMachina`
    - Repository name: `evergreen-dragon-os`
    - Description: "AI-native operating system for evergreen and ELTIF 2.0 fund management"
    - Visibility: Public (or Private, as preferred)
@@ -33,8 +33,8 @@ git commit -m "Initial commit: AI-native fund management OS
 - Comprehensive test suite
 - Full documentation"
 
-# Add remote (replace with actual org name if different)
-git remote add origin https://github.com/deal-ex-machina/evergreen-dragon-os.git
+# Add remote (already configured)
+git remote set-url origin https://github.com/DealExMachina/evergreen-dragon-os.git
 
 # Push to main branch
 git push -u origin main

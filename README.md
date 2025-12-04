@@ -176,7 +176,7 @@ Built with:
 
 ## Organization
 
-Maintained by [Deal ex Machina](https://github.com/deal-ex-machina)
+Maintained by [DealExMachina](https://github.com/DealExMachina)
 
 ---
 
