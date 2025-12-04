@@ -196,12 +196,11 @@ export class Mem0Client {
   }
 }
 
-
 /**
  * Mem0 client manager using singleton pattern
  */
 export const mem0ClientManager = new SingletonClientManager<Mem0Client>(
-  (config) => new Mem0Client(config)
+  (config: Config) => new Mem0Client(config)
 );
 
 /**
@@ -224,4 +223,3 @@ export function setMem0Client(client: Mem0Client): void {
 export function resetMem0Client(): void {
   mem0ClientManager.reset();
 }
-

@@ -26,9 +26,11 @@ jobs:
 
       - run: pnpm --filter @evergreen/supabase-client prisma generate
 
-      - run: pnpm build
+      - name: Build packages (required for composite TypeScript projects)
+        run: pnpm build
 
-      - run: pnpm type-check
+      - name: Type check
+        run: pnpm type-check
 
       - run: pnpm lint
 
