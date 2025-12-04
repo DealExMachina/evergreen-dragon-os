@@ -1,6 +1,7 @@
 import { configSchema, Config } from './schema';
 import { defaultConfig } from './defaults';
-import { fetchInfisicalSecrets, InfisicalConfig } from './infisical';
+import { fetchInfisicalSecrets } from './infisical';
+import { InfisicalConfig } from './schema';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -8,6 +9,7 @@ import * as fs from 'fs';
  * Loads environment variables from .env files.
  * Reads .env first, then .env.local, so .env.local values override .env values.
  */
+
 function loadEnvFiles(): Record<string, string> {
   const env: Record<string, string> = {};
   const envFiles = ['.env', '.env.local']; // Read .env first, then .env.local (higher precedence)
@@ -24,7 +26,10 @@ function loadEnvFiles(): Record<string, string> {
           const equalIndex = trimmed.indexOf('=');
           if (equalIndex > 0) {
             const key = trimmed.substring(0, equalIndex).trim();
-            const value = trimmed.substring(equalIndex + 1).trim().replace(/^["']|["']$/g, '');
+            const value = trimmed
+              .substring(equalIndex + 1)
+              .trim()
+              .replace(/^["']|["']$/g, '');
             env[key] = value;
           }
         }
@@ -75,7 +80,13 @@ function mapEnvToConfig(env: Record<string, string>): Partial<Config> {
     if (env.SUPABASE_SERVICE_KEY) (config.supabase as any).serviceKey = env.SUPABASE_SERVICE_KEY;
   }
 
-  if (env.DUCKDB_FILE || env.DUCKDB_S3_ACCESS_KEY || env.DUCKDB_S3_SECRET_KEY || env.DUCKDB_S3_REGION || env.DUCKDB_S3_ENDPOINT) {
+  if (
+    env.DUCKDB_FILE ||
+    env.DUCKDB_S3_ACCESS_KEY ||
+    env.DUCKDB_S3_SECRET_KEY ||
+    env.DUCKDB_S3_REGION ||
+    env.DUCKDB_S3_ENDPOINT
+  ) {
     config.duckdb = { ...(config.duckdb || {}) } as any;
     if (env.DUCKDB_FILE) (config.duckdb as any).path = env.DUCKDB_FILE;
     if (env.DUCKDB_S3_ACCESS_KEY) (config.duckdb as any).s3AccessKey = env.DUCKDB_S3_ACCESS_KEY;
@@ -108,14 +119,18 @@ function mapEnvToConfig(env: Record<string, string>): Partial<Config> {
     config.infisical = { ...config.infisical } as any;
     (config.infisical as any).projectToken = env.INFISICAL_PROJECT_TOKEN;
     if (env.INFISICAL_PROJECT_ID) (config.infisical as any).projectId = env.INFISICAL_PROJECT_ID;
-    if (env.INFISICAL_ENVIRONMENT) (config.infisical as any).environment = env.INFISICAL_ENVIRONMENT;
+    if (env.INFISICAL_ENVIRONMENT)
+      (config.infisical as any).environment = env.INFISICAL_ENVIRONMENT;
     if (env.INFISICAL_API_URL) (config.infisical as any).apiUrl = env.INFISICAL_API_URL;
   }
 
   if (env.CRYPTOBRO_ENABLED || env.CRYPTOBRO_MIKA_COMPLIANCE_LEVEL) {
     config.cryptoBro = { ...(config.cryptoBro || { chainRpcUrls: {} }) } as any;
     if (env.CRYPTOBRO_ENABLED) (config.cryptoBro as any).enabled = env.CRYPTOBRO_ENABLED === 'true';
-    if (env.CRYPTOBRO_MIKA_COMPLIANCE_LEVEL) (config.cryptoBro as any).mikaComplianceLevel = env.CRYPTOBRO_MIKA_COMPLIANCE_LEVEL as 'light' | 'full';
+    if (env.CRYPTOBRO_MIKA_COMPLIANCE_LEVEL)
+      (config.cryptoBro as any).mikaComplianceLevel = env.CRYPTOBRO_MIKA_COMPLIANCE_LEVEL as
+        | 'light'
+        | 'full';
     if (!(config.cryptoBro as any).chainRpcUrls) (config.cryptoBro as any).chainRpcUrls = {};
   }
 
@@ -178,7 +193,11 @@ export async function loadConfig(options?: {
   }
 
   // Apply runtime overrides (process.env takes final precedence)
-  const runtimeConfig = mapEnvToConfig(process.env);
+  // Filter out undefined values from process.env to match Record<string, string>
+  const processEnv = Object.fromEntries(
+    Object.entries(process.env).filter(([, v]) => v !== undefined)
+  ) as Record<string, string>;
+  const runtimeConfig = mapEnvToConfig(processEnv);
   config = { ...config, ...runtimeConfig };
 
   // Validate and return
@@ -193,8 +212,11 @@ export function loadConfigSync(): Config {
   const env = loadEnvFiles();
   const envConfig = mapEnvToConfig(env);
   config = { ...config, ...envConfig };
-  const runtimeConfig = mapEnvToConfig(process.env);
+  // Filter out undefined values from process.env to match Record<string, string>
+  const processEnv = Object.fromEntries(
+    Object.entries(process.env).filter(([, v]) => v !== undefined)
+  ) as Record<string, string>;
+  const runtimeConfig = mapEnvToConfig(processEnv);
   config = { ...config, ...runtimeConfig };
   return configSchema.parse(config);
 }
-

@@ -15,12 +15,23 @@ export interface InfisicalClient {
  * Creates an Infisical client for fetching secrets.
  * This is a wrapper that can work with the @infisical/sdk or a mock for testing.
  */
-export async function createInfisicalClient(
-  config: InfisicalConfig
-): Promise<InfisicalClient> {
+export async function createInfisicalClient(config: InfisicalConfig): Promise<InfisicalClient> {
   // Try to dynamically import Infisical SDK
   try {
-    const { InfisicalClient: SDKClient } = await import('@infisical/sdk');
+    // Use type assertion since SDK structure may vary
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const infisicalSDK = (await import('@infisical/sdk')) as any;
+    // Try different possible export patterns
+    const SDKClient =
+      infisicalSDK.InfisicalClient ||
+      infisicalSDK.default?.InfisicalClient ||
+      infisicalSDK.default ||
+      infisicalSDK;
+
+    if (!SDKClient) {
+      throw new Error('InfisicalClient not found in SDK');
+    }
+
     const client = new SDKClient({
       token: config.projectToken,
       siteUrl: config.apiUrl || 'https://app.infisical.com',
@@ -69,4 +80,3 @@ export async function fetchInfisicalSecrets(
   const client = await createInfisicalClient(config);
   return client.getAllSecrets();
 }
-
