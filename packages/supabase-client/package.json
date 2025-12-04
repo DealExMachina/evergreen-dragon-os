@@ -1,6 +1,6 @@
 {
   "name": "@evergreen/supabase-client",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Typed Supabase client with Realtime helpers and RPC wrappers",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

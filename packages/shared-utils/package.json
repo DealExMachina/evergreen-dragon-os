@@ -1,6 +1,6 @@
 {
   "name": "@evergreen/shared-utils",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Shared utilities for logging, tracing, feature flags, and error handling",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

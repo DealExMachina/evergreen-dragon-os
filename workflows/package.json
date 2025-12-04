@@ -1,6 +1,6 @@
 {
   "name": "@evergreen/workflows",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Temporal workflow definitions for Evergreen Dragon OS",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

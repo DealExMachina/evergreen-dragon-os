@@ -1,6 +1,6 @@
 {
   "name": "@evergreen/ag-ui",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Next.js UI for Evergreen Dragon OS with CopilotKit",
   "private": true,
   "scripts": {

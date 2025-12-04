@@ -1,6 +1,6 @@
 {
   "name": "@evergreen/agents-service",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Agent orchestration service using Mastra for Evergreen Dragon OS",
   "main": "./dist/index.js",
   "scripts": {

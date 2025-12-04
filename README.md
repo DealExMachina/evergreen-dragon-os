@@ -1,5 +1,6 @@
 # Evergreen Dragon OS
 
+[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/DealExMachina/evergreen-dragon-os)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)

@@ -1,6 +1,6 @@
 {
   "name": "@evergreen/duckdb-kit",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "DuckDB connection manager, scenario runners, and query builders for analytical operations",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
