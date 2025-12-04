@@ -47,7 +47,7 @@ export class Mem0Client {
     this.apiKey = config.mem0.apiKey;
 
     if (!this.baseUrl || !this.apiKey) {
-      throw new EvergreenError('mem0 configuration missing', {
+      throw new EvergreenError('mem0 configuration missing', 'MEM0_CONFIG_ERROR', {
         hasBaseUrl: !!this.baseUrl,
         hasApiKey: !!this.apiKey,
       });
