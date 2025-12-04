@@ -26,6 +26,8 @@ jobs:
 
       - run: pnpm --filter @evergreen/supabase-client prisma generate
 
+      - run: pnpm build
+
       - run: pnpm type-check
 
       - run: pnpm lint

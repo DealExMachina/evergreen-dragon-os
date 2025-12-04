@@ -69,10 +69,10 @@ export class HttpClient {
 
         const contentType = response.headers.get('content-type');
         if (contentType?.includes('application/json')) {
-          return await response.json();
+          return (await response.json()) as T;
         }
 
-        return await response.text() as unknown as T;
+        return (await response.text()) as T;
       } catch (error) {
         clearTimeout(timeoutId);
         if (error instanceof Error && error.name === 'AbortError') {
@@ -83,10 +83,10 @@ export class HttpClient {
     };
 
     if (this.retryOptions) {
-      return withRetry(operation, this.retryOptions);
+      return withRetry<T>(operation, this.retryOptions);
     }
 
-    return withErrorHandling(operation, {
+    return withErrorHandling<T>(operation, {
       operation: `HTTP ${options.method || 'GET'} ${options.path}`,
       url,
     });
@@ -131,7 +131,9 @@ export class HttpClient {
    * Builds full URL with query parameters
    */
   private buildUrl(path: string, query?: Record<string, string | number | boolean>): string {
-    const url = new URL(path.startsWith('http') ? path : `${this.baseUrl}/${path.replace(/^\//, '')}`);
+    const url = new URL(
+      path.startsWith('http') ? path : `${this.baseUrl}/${path.replace(/^\//, '')}`
+    );
 
     if (query) {
       Object.entries(query).forEach(([key, value]) => {
@@ -153,4 +155,3 @@ export class HttpClient {
     };
   }
 }
-
