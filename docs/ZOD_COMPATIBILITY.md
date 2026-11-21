@@ -117,3 +117,10 @@ Then run `pnpm install` and test again.
 
 **Conclusion**: Zod 4.1.13 is compatible with Mastra. Peer dependency warnings are informational and can be safely ignored unless runtime issues occur.
 
+
+
+
+
+
+
+

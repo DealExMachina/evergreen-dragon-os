@@ -1,10 +1,74 @@
-import { Database } from 'duckdb';
+import { Database, Connection } from 'duckdb';
 import type { Config } from '@evergreen/config';
 import { getLogger } from '@evergreen/shared-utils';
 import { DuckDBError } from '@evergreen/shared-utils';
 import type { DuckDBConnection, DuckDBDatabase } from './types';
 import * as fs from 'fs';
 import * as path from 'path';
+
+/**
+ * Adapter that wraps DuckDB's callback-based Connection to our Promise-based interface
+ */
+class DuckDBConnectionAdapter implements DuckDBConnection {
+  private conn: Connection;
+
+  constructor(conn: Connection) {
+    this.conn = conn;
+  }
+
+  async run(query: string, ...params: unknown[]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.conn.run(query, ...params, (err: Error | null) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  async query<T = unknown>(query: string, ...params: unknown[]): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.conn.all(query, ...params, (err: Error | null, result: T[]) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result || []);
+        }
+      });
+    });
+  }
+
+  async close(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.conn.close((err: Error | null) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  /**
+   * Exposes the underlying connection's `all` method for direct callback usage
+   * Used by query-builder which needs the callback signature
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  all(sql: string, ...params: any[]): void {
+    // This method signature is for query-builder which passes a callback as the last param
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const callback = params[params.length - 1] as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const queryParams = params.slice(0, -1);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.conn.all(sql, ...queryParams, callback);
+  }
+}
 
 export interface DuckDBConnectionOptions {
   path: string;
@@ -53,7 +117,8 @@ export class DuckDBConnectionManager {
       this.logger.info(`Connecting to DuckDB at ${absolutePath}`, { readOnly });
 
       this.db = new Database(absolutePath, { access_mode: readOnly ? 'READ_ONLY' : 'READ_WRITE' });
-      this.connection = this.db.connect();
+      const rawConnection = this.db.connect();
+      this.connection = new DuckDBConnectionAdapter(rawConnection);
 
       // Configure connection settings
       await this.configureConnection();
@@ -100,7 +165,8 @@ export class DuckDBConnectionManager {
       // DuckDB can mount S3 as a filesystem
       // This is a simplified version - in production, you'd use DuckDB's S3 extension
       this.db = new Database(':memory:'); // Start with in-memory
-      this.connection = this.db.connect();
+      const rawConnection = this.db.connect();
+      this.connection = new DuckDBConnectionAdapter(rawConnection);
 
       // Install and load httpfs extension for S3 support
       await this.connection.run("INSTALL httpfs;");

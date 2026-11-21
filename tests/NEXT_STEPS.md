@@ -172,3 +172,10 @@ coverage: {
 4. ❌ Don't share state between tests - reset in `beforeEach`
 5. ❌ Don't test implementation details - test behavior
 
+
+
+
+
+
+
+

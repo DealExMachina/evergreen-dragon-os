@@ -56,3 +56,10 @@ EXPOSE 4001
 
 CMD ["node", "dist/index.js"]
 
+
+
+
+
+
+
+

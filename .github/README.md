@@ -27,3 +27,10 @@ It executes:
 - Linting
 - Tests
 
+
+
+
+
+
+
+

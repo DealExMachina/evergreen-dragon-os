@@ -44,3 +44,10 @@ If hooks aren't running:
 1. Ensure husky is installed: `pnpm install`
 2. Check hook permissions: `chmod +x .husky/pre-commit`
 3. Verify husky is initialized: `pnpm exec husky install`
+
+
+
+
+
+
+

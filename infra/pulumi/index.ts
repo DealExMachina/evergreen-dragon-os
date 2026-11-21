@@ -79,3 +79,10 @@ export const analyticsBucketArn = analyticsBucket.arn;
 export const environmentName = environment;
 export const regionName = region;
 
+
+
+
+
+
+
+

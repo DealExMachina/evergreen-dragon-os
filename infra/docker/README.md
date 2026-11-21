@@ -63,3 +63,10 @@ All services include health checks. Wait for services to be healthy before conne
 docker compose -f docker-compose.dev.yml ps
 ```
 
+
+
+
+
+
+
+

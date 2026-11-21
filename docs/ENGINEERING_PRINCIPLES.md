@@ -30,3 +30,10 @@ Guiding conventions for EverGreen Dragon OS. Each principle is enforced in code 
 - Architectural guidance lives here. `docs/REFACTORING_OPPORTUNITIES.md` tracks deltas against these principles, while `docs/REFACTORING_IMPLEMENTATION.md` captures applied changes.
 - When adding a new pattern, update this document first, then reference it from other docs or pull requests.
 
+
+
+
+
+
+
+

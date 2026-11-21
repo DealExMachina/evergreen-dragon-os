@@ -53,3 +53,10 @@ ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "apps/ag-ui/server.js"]
 
+
+
+
+
+
+
+

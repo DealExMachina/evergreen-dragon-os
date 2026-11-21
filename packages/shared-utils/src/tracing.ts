@@ -92,3 +92,10 @@ export function withSpanSync<T>(name: string, fn: (span: Span) => T, parent?: Sp
   }
 }
 
+
+
+
+
+
+
+

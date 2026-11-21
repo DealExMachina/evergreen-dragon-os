@@ -55,7 +55,9 @@ export class ScenarioRunner {
       return {
         scenarioId,
         scenarioName,
-        results: Array.isArray(results) ? { rows: results } : results,
+        results: Array.isArray(results) 
+          ? { rows: results } 
+          : (typeof results === 'object' && results !== null ? results as Record<string, unknown> : {}),
         metadata: {
           executedAt: new Date().toISOString(),
           executionTimeMs: executionTime,
@@ -149,26 +151,15 @@ export class ScenarioRunner {
 
     // Insert results
     for (const result of results) {
-      await new Promise<void>((resolve, reject) => {
-        connection.run(
-          `INSERT INTO scenario_results (scenario_id, scenario_name, results, executed_at, execution_time_ms)
-           VALUES (?, ?, ?, ?, ?)`,
-          [
-            result.scenarioId,
-            result.scenarioName,
-            JSON.stringify(result.results),
-            result.metadata.executedAt,
-            result.metadata.executionTimeMs,
-          ],
-          (err: Error | null) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve();
-            }
-          }
-        );
-      });
+      await connection.run(
+        `INSERT INTO scenario_results (scenario_id, scenario_name, results, executed_at, execution_time_ms)
+         VALUES (?, ?, ?, ?, ?)`,
+        result.scenarioId,
+        result.scenarioName,
+        JSON.stringify(result.results),
+        result.metadata.executedAt,
+        result.metadata.executionTimeMs
+      );
     }
 
     logger.info(`Saved ${results.length} scenario results to DuckDB`);

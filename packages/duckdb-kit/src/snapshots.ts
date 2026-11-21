@@ -49,15 +49,7 @@ export class SnapshotManager {
 
       exportQuery += ')';
 
-      await new Promise<void>((resolve, reject) => {
-        connection.run(exportQuery, (err: Error | null) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
+      await connection.run(exportQuery);
 
       // Add metadata if requested
       if (options.includeMetadata) {
@@ -92,28 +84,12 @@ export class SnapshotManager {
       const connection = this.connectionManager.getConnection();
 
       // Drop table if exists
-      await new Promise<void>((resolve, reject) => {
-        connection.run(`DROP TABLE IF EXISTS ${targetTable}`, (err: Error | null) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
+      await connection.run(`DROP TABLE IF EXISTS ${targetTable}`);
 
       // Import snapshot
       const importQuery = `COPY ${targetTable} FROM '${snapshotPath}' (FORMAT ${detectedFormat.toUpperCase()})`;
 
-      await new Promise<void>((resolve, reject) => {
-        connection.run(importQuery, (err: Error | null) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
+      await connection.run(importQuery);
 
       logger.info(`Snapshot restored successfully: ${targetTable}`);
     } catch (error) {

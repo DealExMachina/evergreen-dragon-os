@@ -59,7 +59,10 @@ describe('Mem0 Client', () => {
 
     (global.fetch as any).mockResolvedValueOnce({
       ok: true,
+      status: 200,
+      headers: new Headers({ 'content-type': 'application/json' }),
       json: async () => mockMemory,
+      text: async () => JSON.stringify(mockMemory),
     });
 
     const result = await client.createMemory('Test memory');
@@ -81,11 +84,15 @@ describe('Mem0 Client', () => {
 
     (global.fetch as any).mockResolvedValueOnce({
       ok: true,
+      status: 200,
+      headers: new Headers({ 'content-type': 'application/json' }),
       json: async () => mockResults,
+      text: async () => JSON.stringify(mockResults),
     });
 
     const results = await client.searchMemories({ query: 'test query' });
     expect(results).toEqual(mockResults);
   });
 });
+
 
